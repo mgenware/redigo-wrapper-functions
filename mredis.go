@@ -61,12 +61,12 @@ func (store *RedisWrapper) GetStringValue(key string) (string, error) {
 }
 
 // GetIntValue returns the result of a GET command and converts it to int.
-func (store *RedisWrapper) GetIntValue(key string) (string, error) {
+func (store *RedisWrapper) GetIntValue(key string) (int, error) {
 	return redis.Int(store.GetValue(key))
 }
 
 // GetInt64Value returns the result of a GET command and converts it to int64.
-func (store *RedisWrapper) GetInt64Value(key string) (string, error) {
+func (store *RedisWrapper) GetInt64Value(key string) (int64, error) {
 	return redis.Int64(store.GetValue(key))
 }
 
@@ -104,11 +104,11 @@ func (store *RedisWrapper) Ping() error {
 }
 
 // GetValue returns the result of a GET command.
-func (store *RedisWrapper) Do(keysAndArgs ...interface{}) (interface{}, error) {
+func (store *RedisWrapper) Do(commandName string, args ...interface{}) (interface{}, error) {
 	c := store.pool.Get()
 	defer c.Close()
 
-	return c.Do(keysAndArgs)
+	return c.Do(commandName, args)
 }
 
 // NewConn returns a new connection from the internal pool.
