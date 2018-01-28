@@ -103,6 +103,13 @@ func (store *RedisWrapper) Ping() error {
 	return nil
 }
 
+// GetValue returns the result of a GET command.
+func (store *RedisWrapper) Do(keysAndArgs ...interface{}) (interface{}, error) {
+	c := store.pool.Get()
+	defer c.Close()
+
+	return c.Do(keysAndArgs)
+}
 /*** Internal functions ***/
 func (store *RedisWrapper) setValueInternal(key string, val interface{}) error {
 	c := store.pool.Get()
