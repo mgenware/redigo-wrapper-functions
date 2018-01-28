@@ -47,12 +47,27 @@ func (store *RedisWrapper) SetStringValue(key string, val string, expires int) e
 	return store.setValueInternal(key, val)
 }
 
-// GetStringValue returns the result of GET command and converts it to string.
-func (store *RedisWrapper) GetStringValue(key string) (string, error) {
+// GetValue returns the result of a GET command.
+func (store *RedisWrapper) GetValue(key string) (interface{}, error) {
 	c := store.pool.Get()
 	defer c.Close()
 
-	return redis.String(c.Do("GET", key))
+	return c.Do("GET", key)
+}
+
+// GetStringValue returns the result of a GET command and converts it to string.
+func (store *RedisWrapper) GetStringValue(key string) (string, error) {
+	return redis.String(store.GetValue(key))
+}
+
+// GetIntValue returns the result of a GET command and converts it to int.
+func (store *RedisWrapper) GetIntValue(key string) (string, error) {
+	return redis.Int(store.GetValue(key))
+}
+
+// GetInt64Value returns the result of a GET command and converts it to int64.
+func (store *RedisWrapper) GetInt64Value(key string) (string, error) {
+	return redis.Int64(store.GetValue(key))
 }
 
 // RemoveValue calls DEL command.
