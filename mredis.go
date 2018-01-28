@@ -110,6 +110,12 @@ func (store *RedisWrapper) Do(keysAndArgs ...interface{}) (interface{}, error) {
 
 	return c.Do(keysAndArgs)
 }
+
+// NewConn returns a new connection from the internal pool.
+func (store *RedisWrapper) NewConn() redis.Conn {
+	return store.pool.Get()
+}
+
 /*** Internal functions ***/
 func (store *RedisWrapper) setValueInternal(key string, val interface{}) error {
 	c := store.pool.Get()
