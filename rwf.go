@@ -1,4 +1,4 @@
-package mredis
+package rwf
 
 import (
 	"errors"
@@ -17,8 +17,8 @@ func NewRedisWrapperFromPool(pool *redis.Pool) *RedisWrapper {
 	return &RedisWrapper{pool: pool}
 }
 
-// NewRedisWrapperFromTcpConn returns an instance of RedisWrapper.
-func NewRedisWrapperFromTcpConn(dialAddress string, maxIdle, maxActive int, dleTimeout time.Duration) *RedisWrapper {
+// NewRedisWrapperFromTCPConn returns an instance of RedisWrapper.
+func NewRedisWrapperFromTCPConn(dialAddress string, maxIdle, maxActive int, dleTimeout time.Duration) *RedisWrapper {
 	pool := &redis.Pool{
 		MaxIdle:   maxIdle,
 		MaxActive: maxActive,
@@ -103,7 +103,7 @@ func (store *RedisWrapper) Ping() error {
 	return nil
 }
 
-// GetValue returns the result of a GET command.
+// Do sends a command to the server and returns the received reply.
 func (store *RedisWrapper) Do(commandName string, args ...interface{}) (interface{}, error) {
 	c := store.pool.Get()
 	defer c.Close()
